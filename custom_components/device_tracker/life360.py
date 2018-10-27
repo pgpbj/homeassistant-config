@@ -170,12 +170,9 @@ class Life360Scanner:
         self._dev_data = {}
         self._started = util.dt.utcnow()
 
-<<<<<<< HEAD
         self._count = 0
 
-=======
         self._update_life360()
->>>>>>> upstream/master
         track_time_interval(self._hass, self._update_life360, interval)
 
     def _ok(self, key):
