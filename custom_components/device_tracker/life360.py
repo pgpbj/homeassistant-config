@@ -24,7 +24,7 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.event import track_time_interval
 from homeassistant import util
 
-__version__ = '1.5.0'
+__version__ = '1.6.1'
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -170,8 +170,12 @@ class Life360Scanner:
         self._dev_data = {}
         self._started = util.dt.utcnow()
 
+<<<<<<< HEAD
         self._count = 0
 
+=======
+        self._update_life360()
+>>>>>>> upstream/master
         track_time_interval(self._hass, self._update_life360, interval)
 
     def _ok(self, key):
@@ -207,12 +211,12 @@ class Life360Scanner:
             overdue = util.dt.utcnow() - update > self._max_update_wait
             if overdue and not reported:
                 self._hass.bus.fire(
-                    'device_tracker.life360_update_overdue',
+                    'life360_update_overdue',
                     {'entity_id': ENTITY_ID_FORMAT.format(dev_id)})
                 reported = True
             elif not overdue and reported:
                 self._hass.bus.fire(
-                    'device_tracker.life360_update_restored', {
+                    'life360_update_restored', {
                         'entity_id': ENTITY_ID_FORMAT.format(dev_id),
                         'wait':
                             str(last_seen - (prev_seen or self._started))
@@ -293,7 +297,7 @@ class Life360Scanner:
                 if self._hass.config.units.is_metric:
                     speed = util.distance.convert(
                         speed, LENGTH_MILES, LENGTH_KILOMETERS)
-                speed = round(speed)
+                speed = max(0, round(speed))
             except (TypeError, ValueError):
                 speed = STATE_UNKNOWN
             driving = bool_attr_from_int(loc.get('isDriving'))

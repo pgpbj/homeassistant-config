@@ -1,7 +1,7 @@
 # Composite Device Tracker
 This platform creates a composite device tracker from one or more other device trackers and/or binary sensors. It will update whenever one of the watched entities updates, taking the last_seen/last_updated (and possibly GPS and battery) data from the changing entity. The result can be a more accurate and up-to-date device tracker if the "input" device tracker's update irregularly.
 
-Currently device_tracker's with a source_type of bluetooth, gps or router are supported, as well as binary_sensor's.
+Currently device_tracker's with a source_type of bluetooth, bluetooth_le, gps or router are supported, as well as binary_sensor's.
 ## Installation
 See [Installing and Updating](custom_updater.md) to use Custom Updater.
 
@@ -56,3 +56,6 @@ Date | Version | Notes
 20180925 | [1.1.0](https://github.com/pnbruckner/homeassistant-config/blob/d57cc5bdae4eeee98d0eebb6cba493243e20c0cd/custom_components/device_tracker/composite.py) | Add support for network-based (aka router) device trackers.
 20180926 | [1.2.0](https://github.com/pnbruckner/homeassistant-config/blob/67ca1774af55c9d1b84672160ad07a7a34fbbf4c/custom_components/device_tracker/composite.py) | Add support for bluetooth device trackers and binary sensors.
 20180926 | [1.3.0](https://github.com/pnbruckner/homeassistant-config/blob/ed9bab69ea9cdd2bb2a892cf3a1b23f930119f0b/custom_components/device_tracker/composite.py) | Add entity_id and last_entity_id attributes. Fix bug in 1.2.0 that affected state of binary_sensors in state machine.
+20181016 | [1.4.0](https://github.com/pnbruckner/homeassistant-config/blob/42faa22bdc3cc7cc63df3744a81bc235507996b6/custom_components/device_tracker/composite.py) | Make sure name is valid object ID.
+20181019 | [1.5.0](https://github.com/pnbruckner/homeassistant-config/blob/d1fffc42d5c309bc6a99ff74d81469c00a4fa71b/custom_components/device_tracker/composite.py) | Remove initialization delay and update immediately according to current state of entities.
+20181022 | [1.5.1](https://github.com/pnbruckner/homeassistant-config/blob/111ce69063dfeda57f4c62a5207cce7d605c5928/custom_components/device_tracker/composite.py) | Log, but otherwise ignore, invalid states of watched entities during init. Improve "skipping" debug message.
