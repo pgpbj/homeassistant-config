@@ -7,6 +7,7 @@ https://github.com/pnbruckner/homeassistant-config#life360py--device_trackerlife
 
 import sys
 import datetime as dt
+from pytz import timezone
 from requests import HTTPError, ConnectionError, Timeout
 from json.decoder import JSONDecodeError
 import logging
@@ -168,6 +169,8 @@ class Life360Scanner:
         self._max_errs = 2
         self._dev_data = {}
         self._started = util.dt.utcnow()
+
+        self._count = 0
 
         track_time_interval(self._hass, self._update_life360, interval)
 
@@ -335,6 +338,25 @@ class Life360Scanner:
 
         checked_ids = []
 
+        #_LOGGER.debug('entered _update_life360')
+
+        et = timezone('America/New_York')
+        time = dt.datetime.now(et)
+        #_LOGGER.info('hour is {}'.format(time.hour))
+        if 17 <= time.hour <= 23:
+            skip = 1
+        elif 8 <= time.hour < 17:
+            skip = 10
+        else:
+            skip = 120
+
+        self._count = self._count +1
+        #_LOGGER.info('self._count is {}'.format(self._count))
+        if self._count < skip:
+            return
+
+        self._count = 0
+
         #_LOGGER.debug('Checking members')
         err_key = 'get_circles'
         try:
@@ -348,6 +370,7 @@ class Life360Scanner:
             err_key = 'get_circle "{}"'.format(
                 circle.get('name') or circle.get('id'))
             try:
+            	#_LOGGER.info("Checking circles")
                 members = self._api.get_circle(circle['id'])['members']
             except excs as exc:
                 self._exc(err_key, exc)
